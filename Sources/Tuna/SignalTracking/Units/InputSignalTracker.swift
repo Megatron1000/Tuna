@@ -130,7 +130,7 @@ public class SignalTrackerPublisher {
 }
 
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-public extension SignalTrackerPublisher: SignalTrackerDelegate {
+extension SignalTrackerPublisher: SignalTrackerDelegate {
     public func signalTracker(_ signalTracker: SignalTracker, didReceiveBuffer buffer: AVAudioPCMBuffer, atTime time: AVAudioTime) {
         subject.send((buffer, time))
     }
