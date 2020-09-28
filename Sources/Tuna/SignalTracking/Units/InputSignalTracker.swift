@@ -4,9 +4,9 @@ public enum InputSignalTrackerError: Error {
     case inputNodeMissing
 }
 
-class InputSignalTracker: SignalTracker {
-    weak var delegate: SignalTrackerDelegate?
-    var levelThreshold: Float?
+public class InputSignalTracker: SignalTracker {
+    public weak var delegate: SignalTrackerDelegate?
+    public var levelThreshold: Float?
 
     private let bufferSize: AVAudioFrameCount
     private var audioChannel: AVCaptureAudioChannel?
@@ -18,23 +18,23 @@ class InputSignalTracker: SignalTracker {
     private let bus = 0
 
     /// The peak level of the signal
-    var peakLevel: Float? {
+    public var peakLevel: Float? {
         audioChannel?.peakHoldLevel
     }
 
     /// The average level of the signal
-    var averageLevel: Float? {
+    public var averageLevel: Float? {
         audioChannel?.averagePowerLevel
     }
 
     /// The tracker mode
-    var mode: SignalTrackerMode {
+    public var mode: SignalTrackerMode {
         .record
     }
 
     // MARK: - Initialization
 
-    required init(bufferSize: AVAudioFrameCount = 2048, delegate: SignalTrackerDelegate? = nil) {
+    public required init(bufferSize: AVAudioFrameCount = 2048, delegate: SignalTrackerDelegate? = nil) {
         self.bufferSize = bufferSize
         self.delegate   = delegate
         setupAudio()
@@ -42,7 +42,7 @@ class InputSignalTracker: SignalTracker {
 
     // MARK: - Tracking
 
-    func start() throws {
+    public func start() throws {
 
         #if os(iOS)
         try session.setCategory(.playAndRecord)
@@ -93,7 +93,7 @@ class InputSignalTracker: SignalTracker {
         }
     }
 
-    func stop() {
+    public func stop() {
         guard audioEngine != nil else {
             return
         }
@@ -125,17 +125,17 @@ class InputSignalTracker: SignalTracker {
 import Combine
 
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-class SignalTrackerPublisher {
-    let subject = PassthroughSubject<(AVAudioPCMBuffer, AVAudioTime), Error>()
+public class SignalTrackerPublisher {
+    public let subject = PassthroughSubject<(AVAudioPCMBuffer, AVAudioTime), Error>()
 }
 
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-extension SignalTrackerPublisher: SignalTrackerDelegate {
-    func signalTracker(_ signalTracker: SignalTracker, didReceiveBuffer buffer: AVAudioPCMBuffer, atTime time: AVAudioTime) {
+public extension SignalTrackerPublisher: SignalTrackerDelegate {
+    public func signalTracker(_ signalTracker: SignalTracker, didReceiveBuffer buffer: AVAudioPCMBuffer, atTime time: AVAudioTime) {
         subject.send((buffer, time))
     }
 
-    func signalTrackerWentBelowLevelThreshold(_ signalTracker: SignalTracker) {
+    public func signalTrackerWentBelowLevelThreshold(_ signalTracker: SignalTracker) {
 
     }
 }
