@@ -64,6 +64,15 @@ public class InputSignalTracker: SignalTracker {
         #endif
 
         audioEngine = AVAudioEngine()
+        audioEngine?.reset()
+        audioEngine?.prepare()
+        
+        do {
+            try session.setActive(true)
+        } catch let error {
+            print("Activating play and record AVAudioSession failed with error: \(error.localizedDescription)")
+        }
+       
 
         guard let inputNode = audioEngine?.inputNode else {
             throw InputSignalTrackerError.inputNodeMissing
